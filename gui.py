@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter.ttk import Progressbar
 from time import sleep
-
+from logic import *
 class Gui:
     def __init__(self, window: Tk):
 
@@ -281,7 +281,7 @@ class Gui:
 
     def press_Button3(self):
         if self.state == 1:
-            self.openstats()
+            self.openinfo()
         elif self.state == 2:
             self.walk_check = True
             print('pressed walk')
@@ -290,11 +290,40 @@ class Gui:
 
 
     def openstats(self):
-        pass
+        stat_window = Toplevel()
+        stat_window.title('Stats')
+        stat_window.geometry('150x150')
+        stat_window.resizable(False, False)
+
+        Csv_title = Label(stat_window, text='Leaderboard', font=('Playfair Display', 10))
+        Csv_title.pack()
+        Csv_label = Label(stat_window, text="")
+        Csv_label.pack()
+
+        Csv_label.config(text=stats())
+
+
+
+
+
+
+
+
     def submit(self):
-        pass
+        write(self.Entry.get(), self.time)
     def openinfo(self):
-        pass
+        text_window = Toplevel()
+        text_window.title('Info')
+        text_window.geometry('300x400')
+        text_window.resizable(False, False)
+
+        txt = 'Hello I am a fish and a new line should hopefully be created at some point'
+
+        Text_title = Label(text_window, text='Instructions', font=('Playfair Display', 15, 'bold'))
+        Text_title.pack()
+        Text_label = Label(text_window, text=txt, highlightbackground='black', highlightthickness=2)
+        Text_label.pack(anchor='w',pady=(2))
+
 
 
 
