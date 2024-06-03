@@ -3,7 +3,12 @@ from tkinter.ttk import Progressbar
 from time import sleep
 from logic import *
 class Gui:
-    def __init__(self, window: Tk):
+    def __init__(self, window: Tk) -> None:
+
+        '''
+        Method that sets up the Gui elements of the window.
+        :param window: The window created in main.py using the tkinter module. Will hold Gui elements.
+        '''
 
         self.window = window
 
@@ -77,7 +82,12 @@ class Gui:
         self.frame_two.pack()
         self.frame_three.pack(pady=10)
 
-    def startstate1(self):
+    def startstate1(self) -> None:
+
+        '''
+        Method that sets up the Gui elements of the window for the first state of the game.
+        '''
+
         self.state = 1
         self.feed_progress['value'] = 100
         self.pet_progress['value'] = 100
@@ -88,7 +98,10 @@ class Gui:
         self.Button2.config(text='Start', state='normal')
         self.Button3.config(text='Info')
 
-    def startstate2(self):
+    def startstate2(self) -> None:
+        '''
+        Method that sets up the Gui elements of the window for the second state of the game.
+        '''
         self.state = 2
         self.image.config(file='dog.png')
         self.Button1.config(text='Feed')
@@ -101,7 +114,10 @@ class Gui:
         self.decrease_pet_progress()
         self.decrease_walk_progress()
         self.modify_dog_progress()
-    def startstate3(self):
+    def startstate3(self) -> None:
+        '''
+        Method that sets up the Gui elements of the window for the first state of the game.
+        '''
         self.state = 3
         time_title = 'You kept Sarah happy for ' + str(self.time) + ' seconds'
         self.Happy_text.set('')
@@ -129,7 +145,10 @@ class Gui:
         sleep(3)
         self.Entry.config(state='normal')
         self.Button2.config(state='normal')
-    def startstate4(self):
+    def startstate4(self) -> None:
+        '''
+        Method that sets up the Gui elements of the window for the fourth state of the game.
+        '''
         self.state = 4
         self.Happy_text.set('')
         self.Entry.delete(0,'end')
@@ -147,7 +166,11 @@ class Gui:
         self.Button1.config(text='Stats', state='normal')
         self.Button2.config(state='disabled')
         self.Button3.config(text='Home', state='normal')
-    def decrease_feed_progress(self):
+    def decrease_feed_progress(self) -> None:
+        '''
+        Method that decreases the feed progressbar every fourth of a second by 1 and determines how the dog progressbar will be modified.
+        Also contains code that calls increase_feed_progress after 2.5 seconds pass after button1 is pressed.
+        '''
         if self.state == 2:
 
 
@@ -169,9 +192,13 @@ class Gui:
                 self.feed_progress['value'] -= 1
                 self.Hunger_text.set(str(self.feed_progress['value'])+'/100 hunger')
                 self.feed_modifier = determine_feed(self.feed_progress['value'])
-            self.window.after(250, self.decrease_feed_progress)  # Call this function again after 100ms
+            self.window.after(250, self.decrease_feed_progress)  # Call this function again after 250ms
 
-    def decrease_pet_progress(self):
+    def decrease_pet_progress(self) -> None:
+        '''
+        Method that decreases the pet progressbar every fourth of a second by 1 and determines how the dog progressbar will be modified.
+        Also contains code that calls increase_pet_progress after 0.5 seconds pass after button2 is pressed.
+        '''
         if self.state == 2:
 
 
@@ -194,9 +221,13 @@ class Gui:
                 self.Social_text.set(str(self.pet_progress['value']) + '/100 social health')
                 self.pet_modifier = determine_pet(self.pet_progress['value'])
 
-            self.window.after(250, self.decrease_pet_progress)  # Call this function again after 100ms
+            self.window.after(250, self.decrease_pet_progress)  # Call this function again after 250ms
 
-    def decrease_walk_progress(self):
+    def decrease_walk_progress(self) -> None:
+        '''
+        Method that decreases the walk progressbar every fourth of a second by 1 and determines how the dog progressbar will be modified.
+        Also contains code that calls increase_walk_progress after 3 seconds pass after button3 is pressed.
+        '''
         if self.state == 2:
 
 
@@ -219,9 +250,13 @@ class Gui:
                 self.Phys_text.set(str(self.walk_progress['value']) + '/100 physical health')
                 self.walk_modifier = determine_walk(self.walk_progress['value'])
 
-            self.window.after(250, self.decrease_walk_progress)  # Call this function again after 100ms
+            self.window.after(250, self.decrease_walk_progress)  # Call this function again after 250ms
 
-    def modify_dog_progress(self):
+    def modify_dog_progress(self) -> None:
+        '''
+        Method that modifies the dog progressbar every fourth of a second by the 3 modifiers combined.
+        Also contains code that tracks the amount of time, and game state 3 is initiated if the dog progressbar goes at or below zero.
+        '''
         if self.dog_progress['value'] > 0:
             if self.dog_progress['value'] + self.feed_modifier + self.pet_modifier + self.walk_modifier <= 100: #Check to make sure progress is not raised above 100
                 self.dog_progress['value'] += self.feed_modifier + self.pet_modifier + self.walk_modifier
@@ -229,19 +264,31 @@ class Gui:
                 self.dog_progress['value'] = 100
             self.Happy_text.set(str(self.dog_progress['value']) + '/100 happiness')
             self.time += 0.25
-            self.window.after(250, self.modify_dog_progress)  # Call this function again after 100ms
+            self.window.after(250, self.modify_dog_progress)  # Call this function again after 250ms
         else:
             self.startstate3()
 
-    def increase_feed_progress(self, feed_progress):
+    def increase_feed_progress(self, feed_progress: Progressbar) -> None:
+        '''
+        Method that increases the feed progressbar value
+        '''
         feed_progress['value'] = increase_feed(feed_progress['value'])
 
-    def increase_pet_progress(self, pet_progress):
+    def increase_pet_progress(self, pet_progress: Progressbar) -> None:
+        '''
+        Method that increases the pet progressbar value
+        '''
         pet_progress['value'] = increase_pet(pet_progress['value'])
-    def increase_walk_progress(self, walk_progress):
+    def increase_walk_progress(self, walk_progress: Progressbar):
+        '''
+        Method that increases the walk progressbar value
+        '''
         walk_progress['value'] = increase_walk(walk_progress['value'])
 
-    def press_Button1(self):
+    def press_Button1(self) -> None:
+        '''
+        Method that either calls self.openstats() or starts the process to increase the feed progressbar based on the game state
+        '''
         if self.state == 1 or self.state == 4:
             self.openstats()
         if self.state == 2:
@@ -249,7 +296,11 @@ class Gui:
             self.Button3.config(state='disabled')
             self.feed_check = True
 
-    def press_Button2(self):
+    def press_Button2(self) -> None:
+        '''
+        Method that switches the game state to 2, starts the process to increase the pet progressbar based on the game state,
+        or calls self.submit() and switches the game state to 4 if no data errors occur
+        '''
         if self.state == 1:
             self.startstate2()
         elif self.state == 2:
@@ -262,7 +313,11 @@ class Gui:
                 self.startstate4()
 
 
-    def press_Button3(self):
+    def press_Button3(self) -> None:
+        '''
+        Method that calls self.openinfo(), starts the process to increase the walk progressbar, or switches
+        the game state to 1 based on the game state
+        '''
         if self.state == 1:
             self.openinfo()
         elif self.state == 2:
@@ -273,7 +328,10 @@ class Gui:
             self.startstate1()
 
 
-    def openstats(self):
+    def openstats(self) -> None:
+        '''
+        Method that creates the stat_window and its gui elements which display the leaderboard.
+        '''
         stat_window = Toplevel()
         stat_window.title('Stats')
         stat_window.geometry('150x200')
@@ -289,7 +347,10 @@ class Gui:
         Csv_label.config(text=stats())
 
 
-    def submit(self):
+    def submit(self) -> bool:
+        '''
+        Method that calls the write function and accounts for improper data.
+        '''
         try:
             write(self.Entry.get(), self.time)
             return True
@@ -297,7 +358,10 @@ class Gui:
             self.Happy_text.set("Choose a name that isn't on the leaderboard")
         except ValueError:
             self.Happy_text.set("Name should be alphanumeric and <= 20 characters")
-    def openinfo(self):
+    def openinfo(self) -> None:
+        '''
+        Method that creates the text_window and its gui elements which display the instructions.
+        '''
         text_window = Toplevel()
         text_window.title('Info')
         text_window.geometry('300x450')
