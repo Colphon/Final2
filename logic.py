@@ -1,4 +1,5 @@
 import csv
+import re
 
 def stats():
     filepath = 'stats.csv'
@@ -10,7 +11,19 @@ def stats():
         # Update the label with the new string
         return data_string
 def write(name, time):
-    with open('stats.csv', 'a', newline='') as stuffout:
-        contentout = csv.writer(stuffout)
-        contentout.writerow([name, time])
+    name_eligible = re.match('^[a-zA-Z0-9]{1,20}$', name.strip())
+    if name_eligible:
+        name = name.strip()
+        with open('stats.csv', 'r', newline='') as review:
+            for line in review.readlines():
+                match = re.match(name, line)
+                if match:
+                    raise NameError
+        with open('stats.csv', 'a', newline='') as stuffout:
+            contentout = csv.writer(stuffout)
+            contentout.writerow([name, time])
+
+    else:
+        raise ValueError
+
 
