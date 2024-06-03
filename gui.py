@@ -132,6 +132,7 @@ class Gui:
     def startstate4(self):
         self.state = 4
         self.Happy_text.set('')
+        self.Entry.delete(0,'end')
         self.Name.pack_forget()
         self.Entry.pack_forget()
         self.displayframe.pack_forget()
@@ -167,18 +168,7 @@ class Gui:
 
                 self.feed_progress['value'] -= 1
                 self.Hunger_text.set(str(self.feed_progress['value'])+'/100 hunger')
-                if self.feed_progress['value'] > 85:
-                    self.feed_modifier = 5
-                elif self.feed_progress['value'] > 40:
-                    self.feed_modifier = 2
-                elif self.feed_progress['value'] > 30:
-                    self.feed_modifier = -2
-                elif self.feed_progress['value'] > 20:
-                    self.feed_modifier = -4
-                elif self.feed_progress['value'] > 0:
-                    self.feed_modifier = -5
-                else:
-                    self.feed_modifier = -10
+                self.feed_modifier = determine_feed(self.feed_progress['value'])
             self.window.after(250, self.decrease_feed_progress)  # Call this function again after 100ms
 
     def decrease_pet_progress(self):
@@ -202,20 +192,8 @@ class Gui:
 
                 self.pet_progress['value'] -= 1
                 self.Social_text.set(str(self.pet_progress['value']) + '/100 social health')
-                if self.pet_progress['value'] > 75:
-                    self.pet_modifier = 3
-                elif self.pet_progress['value'] > 65:
-                    self.pet_modifier = 1
-                elif self.pet_progress['value'] > 50:
-                    self.pet_modifier = 0
-                elif self.pet_progress['value'] > 30:
-                    self.pet_modifier = -1
-                elif self.pet_progress['value'] > 20:
-                    self.pet_modifier = -2
-                elif self.pet_progress['value'] > 0:
-                    self.pet_modifier = -4
-                else:
-                    self.pet_modifier = -10
+                self.pet_modifier = determine_pet(self.pet_progress['value'])
+
             self.window.after(250, self.decrease_pet_progress)  # Call this function again after 100ms
 
     def decrease_walk_progress(self):
@@ -239,16 +217,8 @@ class Gui:
 
                 self.walk_progress['value'] -= 1
                 self.Phys_text.set(str(self.walk_progress['value']) + '/100 physical health')
-                if self.walk_progress['value'] > 80:
-                    self.walk_modifier = 5
-                elif self.walk_progress['value'] > 45:
-                    self.walk_modifier = 2
-                elif self.walk_progress['value'] > 25:
-                    self.walk_modifier = 1
-                elif self.walk_progress['value'] > 0:
-                    self.walk_modifier = -3
-                else:
-                    self.walk_modifier = -10
+                self.walk_modifier = determine_walk(self.walk_progress['value'])
+
             self.window.after(250, self.decrease_walk_progress)  # Call this function again after 100ms
 
     def modify_dog_progress(self):
@@ -263,25 +233,13 @@ class Gui:
         else:
             self.startstate3()
 
-
-
-
-    # net gain is the value added to the progress value in the if statement of increase_progress - counter needed to execute if statement
     def increase_feed_progress(self, feed_progress):
-        if feed_progress['value'] + 19 <= 100:
-            feed_progress['value'] += 20
-        else:
-            feed_progress['value'] = 101
+        feed_progress['value'] = increase_feed(feed_progress['value'])
+
     def increase_pet_progress(self, pet_progress):
-        if pet_progress['value'] + 6 <= 100:
-            pet_progress['value'] += 7
-        else:
-            pet_progress['value'] = 101
+        pet_progress['value'] = increase_pet(pet_progress['value'])
     def increase_walk_progress(self, walk_progress):
-        if walk_progress['value'] + 26 <= 100:
-            walk_progress['value'] += 27
-        else:
-            walk_progress['value'] = 101
+        walk_progress['value'] = increase_walk(walk_progress['value'])
 
     def press_Button1(self):
         if self.state == 1 or self.state == 4:
